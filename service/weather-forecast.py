@@ -40,9 +40,12 @@ def get():
         country =  'no'
         url = os.environ.get('baseurl')+ zip + ',' + country + os.environ.get('appid')
         r = requests.get(url)
+        res = json.loads(r.text)
+        res['_id']= entity['_id'].split(":")[-1]
+
 
     return Response(
-        stream_json(json.loads(r.text)),
+        stream_json(res),
         mimetype='application/json'
     )
 
