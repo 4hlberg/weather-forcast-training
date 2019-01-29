@@ -19,10 +19,10 @@ logger.setLevel(logging.DEBUG)
 
 
 # stream entities
-def stream_json(clean):
+def stream_json(res):
     first = True
     yield '['
-    for i, row in enumerate(clean):
+    for i, row in enumerate(res):
         if not first:
             yield ','
         else:
@@ -41,13 +41,9 @@ def get():
         url = os.environ.get('baseurl')+ zip + ',' + country + os.environ.get('appid')
         r = requests.get(url)
         res = json.loads(r.text)
-        res['_id']= entity['_id'].split(":")[-1]
 
 
-    return Response(
-        stream_json(res),
-        mimetype='application/json'
-    )
+    return Response(stream_json(res['weather']), mimetype='application/json')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', threaded=True, port=os.environ.get('port',5000))
