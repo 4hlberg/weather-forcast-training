@@ -16,22 +16,6 @@ stdout_handler.setFormatter(logging.Formatter(format_string))
 logger.addHandler(stdout_handler)
 logger.setLevel(logging.DEBUG)
 
-
-
-# stream entities
-def stream_json(res):
-    first = True
-    yield '['
-    for i, row in enumerate(res):
-        if not first:
-            yield ','
-        else:
-            first = False
-        yield json.dumps(row)
-    yield ']'
-
-
-
 @app.route("/get", methods=["POST"])
 def get():
     entities= request.get_json()
@@ -41,9 +25,11 @@ def get():
         url = os.environ.get('baseurl')+ zip + ',' + country + os.environ.get('appid')
         r = requests.get(url)
         res = json.loads(r.text)
+        new_dict = res['weather'].copy()
 
 
-    return Response(stream_json(res['weather']), mimetype='application/json')
+    return Response(json.dumps(new_dict),
+                    mimetype='application/json')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', threaded=True, port=os.environ.get('port',5000))
