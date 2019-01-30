@@ -25,10 +25,8 @@ def get():
         url = os.environ.get('baseurl')+ zip + ',' + country + os.environ.get('appid')
         r = requests.get(url)
         res = json.loads(r.text)
-        new_dict = res['weather'].copy()
 
-
-    return Response(json.dumps(new_dict),
+    return Response(json.dumps(res),
                     mimetype='application/json')
 
 if __name__ == '__main__':
