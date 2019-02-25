@@ -16,17 +16,35 @@ stdout_handler.setFormatter(logging.Formatter(format_string))
 logger.addHandler(stdout_handler)
 logger.setLevel(logging.DEBUG)
 
+def stream_json(res):
+    first = True
+    yield '['
+    for i, row in enumerate(res):
+        if not first:
+            yield ','
+        else:
+            first = False
+        yield json.dumps(row)
+    yield ']'
+
 @app.route("/get", methods=["POST"])
 def get():
+    testing = []
     entities= request.get_json()
     for entity in entities:
+
         zip = entity['difi-postnummer:postnummer']
-        country =  'no'
+        country = 'no'
         url = os.environ.get('baseurl')+ zip + ',' + country + os.environ.get('appid')
+
         r = requests.get(url)
         res = json.loads(r.text)
+    for i in range(len(entities)):
+        testing.append(res)
+        i += 1
+        logger.info(res)
 
-    return Response(json.dumps(res),
+    return Response(stream_json(testing),
                     mimetype='application/json')
 
 if __name__ == '__main__':
