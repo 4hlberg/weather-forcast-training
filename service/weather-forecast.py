@@ -3,6 +3,7 @@ import os
 import requests
 import logging
 import json
+import time
 
 app = Flask(__name__)
 logger = None
@@ -39,9 +40,11 @@ def get():
 
         r = requests.get(url)
         res = json.loads(r.text)
+        time.sleep(1)
     for i in range(len(entities)):
         testing.append(res)
         i += 1
+
 
     return Response(stream_json(testing),
                     mimetype='application/json')
