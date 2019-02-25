@@ -16,10 +16,10 @@ stdout_handler.setFormatter(logging.Formatter(format_string))
 logger.addHandler(stdout_handler)
 logger.setLevel(logging.DEBUG)
 
-def stream_json(res):
+def stream_json(testing):
     first = True
     yield '['
-    for i, row in enumerate(res):
+    for i, row in enumerate(testing):
         if not first:
             yield ','
         else:
@@ -42,7 +42,6 @@ def get():
     for i in range(len(entities)):
         testing.append(res)
         i += 1
-        logger.info(res)
 
     return Response(stream_json(testing),
                     mimetype='application/json')
