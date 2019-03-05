@@ -3,7 +3,7 @@ import os
 import requests
 import logging
 import json
-import time
+from time import sleep
 
 app = Flask(__name__)
 logger = None
@@ -34,13 +34,15 @@ def get():
     entities= request.get_json()
     for entity in entities:
 
-        zip = entity['difi-postnummer:postnummer']
+        zip = entity[os.environ.get('namespace') + 'postnummer']
         country = 'no'
         url = os.environ.get('baseurl')+ zip + ',' + country + os.environ.get('appid')
 
         r = requests.get(url)
         res = json.loads(r.text)
-        time.sleep(1)
+        res['_id'] = entity['_id'].split(':')[-1]
+        logger.info(res)
+        sleep(1)
     for i in range(len(entities)):
         testing.append(res)
         i += 1
