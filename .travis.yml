@@ -13,7 +13,7 @@ script: true
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t 4hlberg/weather-forcast-training:$TRAVIS_TAG .;
+    docker build -t 4hlberg/weather-forcast-training:"$TRAVIS_TAG" .;
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push 4hlberg/weather-forcast-training:$TRAVIS_TAG;
+    docker push 4hlberg/weather-forcast-training:"$TRAVIS_TAG";
 fi
