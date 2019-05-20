@@ -12,8 +12,4 @@ services:
 script: true
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build -t 4hlberg/weather-forcast-training .;
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push 4hlberg/weather-forcast-training:latest;
-fi
+- bash <(curl -s https://raw.githubusercontent.com/4hlberg/travis-docker-build-sh/master/after_success.sh)
